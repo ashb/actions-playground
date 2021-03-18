@@ -12,7 +12,16 @@ on:
 jobs:
   build:
 
-    runs-on: self-hosted 
+    runs-on: >-
+      ${{ (
+        (
+          github.event_name == 'push' ||
+          github.event_name == 'schedule' ||
+          contains(fromJSON('[
+            "ashb",
+          ]'), github.actor)
+        )
+      ) && 'self-hosted' || 'ubuntu-20.04' }}
 
     steps:
     - uses: actions/checkout@v2
